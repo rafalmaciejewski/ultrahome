@@ -1,0 +1,24 @@
+# Commit messages follow Conventional Commits, so semantic-release decides
+# what each update releases. Security updates use the same settings.
+version: 2
+updates:
+  # Runtime dependencies ship pinned in npm-shrinkwrap.json, so users get an
+  # update only in a new release: fix(deps) publishes a patch. Development
+  # dependencies never reach users: chore(deps-dev) publishes nothing.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: fix
+      prefix-development: chore
+      include: scope
+
+  # Workflow actions don't reach users: ci(deps) publishes nothing.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
+      include: scope

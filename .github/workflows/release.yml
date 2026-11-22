@@ -1,0 +1,72 @@
+name: Test and release
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Preview the next release
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }}, Node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: ['22.20.0', '24.x', '26.x']
+        include:
+          - os: macos-latest
+            node: '24.x'
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      # The search tests check what ripgrep sees in a home.
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update -q && sudo apt-get install -yq ripgrep
+      - if: runner.os == 'macOS'
+        run: brew install ripgrep
+      - run: npm test
+      - run: npm pack --dry-run
+
+  release:
+    name: Release
+    needs: test
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: npm-release-main
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24.x'
+          package-manager-cache: false
+      - run: npm ci
+      - name: Run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm run release -- ${{ inputs.dry_run && '--dry-run' || '--no-dry-run' }}

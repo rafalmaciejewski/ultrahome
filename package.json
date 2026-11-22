@@ -1,0 +1,60 @@
+{
+  "name": "ultrahome",
+  "version": "0.0.0-development",
+  "description": "The Home Repo pattern for multi-repo AI workspaces.",
+  "keywords": [
+    "agents",
+    "agents-md",
+    "ai",
+    "claude-code",
+    "cli",
+    "codex",
+    "git",
+    "multi-repo",
+    "workspace"
+  ],
+  "homepage": "https://github.com/rafalmaciejewski/ultrahome#readme",
+  "bugs": {
+    "url": "https://github.com/rafalmaciejewski/ultrahome/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafalmaciejewski/ultrahome.git"
+  },
+  "bin": {
+    "ultrahome": "src/cli.mjs"
+  },
+  "files": [
+    "src/",
+    "npm-shrinkwrap.json"
+  ],
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "type": "module",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "test": "node --test",
+    "test:cov": "node --test --experimental-test-coverage --test-coverage-exclude='tests/**'",
+    "prepublishOnly": "npm test",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
+    "release": "semantic-release"
+  },
+  "dependencies": {
+    "commander": "^14.0.3",
+    "jsonc-parser": "^3.3.1"
+  },
+  "devDependencies": {
+    "oxfmt": "0.79.0",
+    "semantic-release": "25.0.9"
+  },
+  "engines": {
+    "node": ">=22.20.0"
+  }
+}
