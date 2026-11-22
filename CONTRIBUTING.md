@@ -8,6 +8,10 @@ npm run format:check
 npm test
 ```
 
+The CLI supports Node.js 22.20 and later, and CI tests it on 22.20, 24 and 26.
+semantic-release, a development dependency, needs Node.js 26.13 or later, so
+`npm ci` on an older Node prints `EBADENGINE` warnings that you can ignore.
+
 `npm run test:cov` runs the tests with Node's built-in coverage and prints a
 report for `src/`. It includes the CLI processes the tests start, since they
 inherit Node's coverage settings.

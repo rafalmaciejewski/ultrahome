@@ -25,7 +25,7 @@ jobs:
         node: ['22.20.0', '24.x', '26.x']
         include:
           - os: macos-latest
-            node: '24.x'
+            node: '26.x'
     steps:
       - uses: actions/checkout@v7
         with:
@@ -60,9 +60,10 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+      # semantic-release 26 needs Node.js 26.13 or later.
       - uses: actions/setup-node@v7
         with:
-          node-version: '24.x'
+          node-version: '26.x'
           package-manager-cache: false
       - run: npm ci
       - name: Run semantic-release
