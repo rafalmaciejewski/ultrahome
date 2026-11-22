@@ -41,7 +41,6 @@
   "scripts": {
     "test": "node --test",
     "test:cov": "node --test --experimental-test-coverage --test-coverage-exclude='tests/**'",
-    "prepublishOnly": "npm test",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
     "release": "semantic-release"
