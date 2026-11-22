@@ -54,6 +54,8 @@ jobs:
       cancel-in-progress: false
     permissions:
       contents: write
+      # npm trusted publishing exchanges this OIDC token for a short-lived
+      # publish token, so the workflow stores no npm token.
       id-token: write
     steps:
       - uses: actions/checkout@v7
@@ -69,5 +71,4 @@ jobs:
       - name: Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm run release -- ${{ inputs.dry_run && '--dry-run' || '--no-dry-run' }}

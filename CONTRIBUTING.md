@@ -35,8 +35,10 @@ GitHub Actions runs the format check, test suite, and package check on pull
 requests to `main` and on pushes to `main`, on Linux and macOS. After a push
 passes on every platform and Node version in the matrix, semantic-release
 reads the commits since the last `vX.Y.Z` tag, publishes the npm package with
-provenance, and creates a GitHub Release with generated notes. Provenance needs
-a public repository, and publishing from anywhere other than GitHub Actions
+provenance, and creates a GitHub Release with generated notes. It publishes
+through npm trusted publishing: npm accepts OIDC tokens from this repository's
+`release.yml` workflow, so no npm token is stored anywhere. Provenance needs a
+public repository, and publishing from anywhere other than GitHub Actions
 fails. The published CLI reports the version assigned at release time.
 
 Use a Conventional Commit message for the commit that lands on `main`. With
